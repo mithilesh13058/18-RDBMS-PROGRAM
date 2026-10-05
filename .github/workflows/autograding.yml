@@ -1,0 +1,31 @@
+name: PL-SQL Autograding
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  autograding:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Check Required Files
+        run: |
+          test -f README.md
+          test -f starter.sql
+          test -f solution.sql
+          test -f test.sql
+          test -f .github/workflows/autograding.yml
+          echo "All required files are present."
+
+      - name: Verify PL/SQL Function
+        run: |
+          grep -qi "CREATE OR REPLACE FUNCTION" solution.sql
+          grep -qi "RETURN NUMBER" solution.sql
+          grep -qi "COUNT(*)" solution.sql
+          grep -qi "FROM Student" solution.sql
+          grep -qi "DepartmentID" solution.sql
+          echo "PL/SQL function verified successfully."
